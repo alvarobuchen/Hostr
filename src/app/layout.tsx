@@ -1,32 +1,37 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
-import { AppShell } from "@/components/layout/AppShell";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Fraunces, Inter } from 'next/font/google';
+import { Providers } from './providers';
+import { SiteHeader } from '@/components/site-header';
+import Footer from '@/components/ui/footer';
+import './globals.css';
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+// Brand type: Fraunces for headlines + logotype, Inter for UI/body.
+const fraunces = Fraunces({
+  variable: '--font-fraunces',
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Hostr — Plan unforgettable parties",
-  description:
-    "Discover venues, manage RSVPs, and collect group gifts — one app for milestone celebrations.",
+  title: 'Cenit — Premium Event Planning',
+  description: 'Find venues, create shared gifts, and collect contributions for unforgettable celebrations.',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${jakarta.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <AppShell>{children}</AppShell>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable} h-full`}>
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--ink-1)] antialiased">
+        <Providers>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

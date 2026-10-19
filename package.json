@@ -1,26 +1,39 @@
 {
-  "name": "party-plan",
+  "name": "luxegather",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/payments/webhook"
   },
   "dependencies": {
-    "lucide-react": "^1.21.0",
-    "next": "16.2.9",
+    "@remotion/player": "^4.0.475",
+    "axios": "^1.15.2",
+    "dotenv": "^17.4.2",
+    "firebase": "^12.17.0",
+    "firebase-admin": "^14.2.0",
+    "framer-motion": "^11.0.0",
+    "next": "16.2.4",
+    "next-auth": "^4.24.14",
+    "nodemailer": "^7.0.13",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-hot-toast": "^2.6.0",
+    "remotion": "^4.0.475",
+    "stripe": "^22.1.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

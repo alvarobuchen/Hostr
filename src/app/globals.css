@@ -1,57 +1,376 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   CENIT — Design System
+   Brand palette: drawn straight from the logotype —
+     deep navy "cenit" wordmark · antique-gold dot · cream field
+       Navy #16263F   ·   Oro #C49A4A   ·   Crema #F5F1E8
+   Theme: LIGHT — cream surfaces, navy ink, gold accent
+───────────────────────────────────────────── */
 :root {
-  --background: #fafafe;
-  --foreground: #0f0a1a;
-  --muted: #6b6580;
-  --card: #ffffff;
-  --accent-violet: #8b5cf6;
-  --accent-fuchsia: #d946ef;
-  --accent-cyan: #22d3ee;
+  /* Brand primitives — navy ink, antique gold as the living accent */
+  --navy:      #16263F;   /* logo navy — primary ink & text on gold fills */
+  --gold:      #B0832E;   /* antique gold, tuned for contrast on white */
+  --gold-deep: #8A6522;
+  --cream:     #F5F1E8;
+
+  /* Warm white → cream surface ramp */
+  --bg:        #FBFAF7;   /* page — warm white */
+  --bg-1:      #FFFFFF;   /* cards */
+  --bg-2:      #F4F1EA;   /* inset panels / inputs / tiles (cream) */
+  --bg-3:      #ECE7DB;
+  --bg-4:      #E0D9C9;
+
+  /* Navy ink ramp */
+  --ink-1:     #16263F;
+  --ink-2:     rgba(22,38,63,0.66);
+  --ink-3:     rgba(22,38,63,0.45);
+  --ink-4:     rgba(22,38,63,0.14);
+
+  --line:      rgba(22,38,63,0.11);
+  --line-2:    rgba(22,38,63,0.17);
+
+  /* Gold accent scale — the --amber-* names resolve to true gold again,
+     so links, labels, badges, progress and focus rings carry colour. */
+  --amber:     var(--gold);
+  --amber-hi:  #946E25;   /* deeper gold on hover */
+  --amber-lo:  rgba(176,131,46,0.12);
+  --amber-br:  rgba(176,131,46,0.40);
+
+  --ok:        #2E9E6B;
+  --err:       #CF5238;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-card: var(--card);
-  --font-sans: var(--font-jakarta);
+  --color-background: var(--bg);
+  --color-foreground: var(--ink-1);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #07050f;
-    --foreground: #f4f0ff;
-    --muted: #9d96b0;
-    --card: #12101c;
-  }
-}
-
+/* ─── Reset ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-jakarta), system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink-1);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+button, input, textarea, select { font: inherit; }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+::selection { background: var(--amber-lo); color: var(--ink-1); }
+
+/* ─── Typography ─────────────────────────────── */
+.t-display {
+  font-family: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.9rem, 7vw, 6.25rem);
+  font-weight: 600;
+  line-height: 1.0;
+  letter-spacing: -0.022em;
+  color: var(--ink-1);
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, #a78bfa 0%, #e879f9 45%, #22d3ee 100%);
+.t-title {
+  font-family: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.85rem, 3.5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink-1);
+}
+
+.t-heading {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink-1);
+}
+
+.t-body  { font-size: 0.9375rem; line-height: 1.65; color: var(--ink-2); }
+.t-small { font-size: 0.8125rem; line-height: 1.55; color: var(--ink-2); }
+
+.t-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.t-label-amber {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.t-mono {
+  font-family: ui-monospace, 'Cascadia Code', 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+}
+
+/* ─── Layout ─────────────────────────────────── */
+.wrap {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+@media (min-width: 640px)  { .wrap { padding: 0 2.5rem; } }
+@media (min-width: 1024px) { .wrap { padding: 0 3rem; } }
+
+.page { padding-top: 4.5rem; padding-bottom: 6rem; }
+.section { padding-top: 5rem; padding-bottom: 5rem; }
+
+.rule { height: 1px; background: var(--line); }
+
+/* ─── Cards ──────────────────────────────────── */
+.card {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(22,38,63,0.05), 0 14px 34px -20px rgba(22,38,63,0.18);
+}
+
+.card-p { padding: 2rem; }
+@media (min-width: 768px) { .card-p { padding: 2.5rem; } }
+
+.card-lift {
+  transition: transform 320ms cubic-bezier(0.22,1,0.36,1),
+              border-color 250ms,
+              background 250ms;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  border-color: var(--amber-br);
+  box-shadow: 0 2px 6px rgba(22,38,63,0.06), 0 26px 52px -24px rgba(22,38,63,0.26),
+              0 0 0 1px var(--amber-lo);
+}
+
+/* ─── Inputs ─────────────────────────────────── */
+.inp {
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: 11px;
+  padding: 11px 14px;
+  color: var(--ink-1);
+  outline: none;
+  transition: border-color 200ms, background 200ms, box-shadow 200ms;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.inp::placeholder { color: var(--ink-3); }
+.inp:focus { border-color: var(--amber-br); background: var(--bg-3); box-shadow: 0 0 0 3px var(--amber-lo); }
+.inp option { background: var(--bg-2); color: var(--ink-1); }
+
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+/* ─── Buttons ─────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: -0.005em;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 220ms cubic-bezier(0.22,1,0.36,1);
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn:not(:disabled):hover { transform: translateY(-1.5px); }
+.btn:not(:disabled):active { transform: translateY(0); }
+
+.btn-primary {
+  background: var(--gold);
+  color: #FFFFFF;
+  border-color: var(--gold);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.22) inset, 0 8px 22px -10px rgba(176,131,46,0.6);
+}
+.btn-primary:not(:disabled):hover {
+  background: var(--amber-hi);
+  border-color: var(--amber-hi);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.26) inset, 0 12px 30px -10px rgba(176,131,46,0.72);
+}
+
+.btn-ghost {
+  background: var(--bg-1);
+  color: var(--ink-1);
+  border-color: var(--line-2);
+}
+.btn-ghost:not(:disabled):hover { background: var(--bg-2); border-color: rgba(26,36,51,0.28); }
+
+.btn-sm  { padding: 7px 15px; font-size: 0.8125rem; border-radius: 8px; }
+.btn-lg  { padding: 14px 28px; font-size: 1rem; border-radius: 12px; }
+
+/* ─── Badge ──────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-2);
+  color: var(--ink-2);
+}
+.badge-amber {
+  border-color: var(--amber-br);
+  color: var(--amber);
+  background: var(--amber-lo);
+}
+
+/* ─── Progress ───────────────────────────────── */
+.progress {
+  height: 6px;
+  background: var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--amber);
+  border-radius: 99px;
+  transition: width 900ms cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ─── Stat tiles ─────────────────────────────── */
+.tile {
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+}
+.tile-amber {
+  padding: 1.25rem 1.5rem;
+  background: var(--amber-lo);
+  border: 1px solid var(--amber-br);
+  border-radius: 14px;
+}
+
+/* ─── Alerts ─────────────────────────────────── */
+.alert-err {
+  border-radius: 11px;
+  border: 1px solid rgba(248,113,113,0.22);
+  background: rgba(248,113,113,0.07);
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: var(--err);
+}
+.alert-ok {
+  border-radius: 11px;
+  border: 1px solid rgba(52,211,153,0.22);
+  background: rgba(52,211,153,0.07);
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: var(--ok);
+}
+.alert-info {
+  border-radius: 11px;
+  border: 1px solid var(--amber-br);
+  background: var(--amber-lo);
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: var(--amber);
+}
+
+/* ─── Animations ─────────────────────────────── */
+@keyframes fade-up   { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fade-in   { from { opacity:0; } to { opacity:1; } }
+@keyframes slide-in-left { from { opacity:0; transform:translateX(-20px); } to { opacity:1; transform:translateX(0); } }
+@keyframes scale-in  { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+@keyframes shimmer   { 0%,100% { opacity:0.4; } 50% { opacity:1; } }
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, 0) scale(1); }
+  50%      { opacity: 1;    transform: translate(-50%, -3%) scale(1.08); }
+}
+@keyframes glow-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(4%, 5%) scale(1.12); }
+}
+
+/* Gentle float for the single gold accent dot */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Warm cream→gold panel gradient (light) */
+.motif-bg {
+  background:
+    radial-gradient(120% 120% at 30% 18%, rgba(176,131,46,0.14), transparent 60%),
+    linear-gradient(165deg, var(--bg-3), var(--bg-2));
+}
+.float-dot { animation: float-y 7s ease-in-out infinite; }
+
+/* ─── Sequential scroll (igloo-style), scoped to home ─── */
+html.snap-page { scroll-snap-type: y proximity; scroll-padding-top: 64px; }
+.snap-sec { scroll-snap-align: start; }
+/* The global footer (Contact, etc.) sits after the last snap section.
+   Give it its own snap stop so it can always be reached and rests
+   flush at the bottom instead of being trapped by the section above. */
+html.snap-page footer { scroll-snap-align: end; }
+@media (prefers-reduced-motion: reduce) {
+  html.snap-page { scroll-snap-type: none; }
+}
+/* Snap scrolling is a desktop affordance — on touch/phones it fights the
+   native momentum scroll and traps the user, so turn it off on small screens. */
+@media (max-width: 767px) {
+  html.snap-page { scroll-snap-type: none; scroll-padding-top: 0; }
+}
+
+/* Film grain — a touch stronger on dark so it reads as texture, not dust */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.02;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Accent text — monochrome by default; gold reserved for the rare detail */
+.text-gradient-amber {
+  background: linear-gradient(120deg, var(--ink-1) 0%, var(--ink-1) 55%, var(--ink-3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* One true-gold accent word, used at most once per view */
+.text-gold {
+  background: linear-gradient(120deg, #D8B061 0%, var(--gold) 55%, var(--gold-deep) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-@keyframes ping {
-  75%,
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  html { scroll-behavior: auto; }
 }
 
-.animate-ping {
-  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+/* Scroll-reveal — driven by framer-motion in JS, these are fallbacks */
+.reveal { opacity:0; transform:translateY(24px); }
+.reveal.visible { animation: fade-up 0.65s cubic-bezier(0.22,1,0.36,1) forwards; }
